@@ -1,199 +1,134 @@
-# Back Market – Simulateur de Formation au Live Chat
+Back Market - Simulateur de formation Live Chat
+Outil de formation dans le navigateur pour les agents du service client Back Market. Deux personnes se connectent à la même session de chat. Une personne joue le rôle de l'Agent et l'autre celui du Client.
+Démo en ligne
+https://aitormaa.github.io/FR-Back-Market-Live-Chat-Simulator/
+Fonctionnalités
+Sessions en direct à deux utilisateurs
 
-Un outil de formation interactif, accessible depuis le navigateur, destiné aux agents du service client Back Market. Deux utilisateurs se connectent en temps réel : l'un joue le rôle de l'**Agent**, l'autre celui du **Client**, afin de s'entraîner à la gestion du chat en direct à travers des scénarios de support réalistes.
+    L'Agent crée un code de session de six caractères.
+    Le Client rejoint la session avec ce code.
+    Firebase Realtime Database synchronise les sessions et les messages entre les appareils.
+    Firebase Anonymous Authentication protège l'accès à la base de données sans demander de compte utilisateur.
+    PeerJS WebRTC peut établir une connexion directe lorsque le réseau l'autorise.
+    Si WebRTC est bloqué par le réseau de l'entreprise, Firebase continue de synchroniser la session.
 
-> **Démo en ligne :** [https://aitormaa.github.io/FR-Back-Market-Live-Chat-Simulator/](https://aitormaa.github.io/FR-Back-Market-Live-Chat-Simulator/)
+52 scénarios de formation
+Niveau	Plage de codes	Scénarios	Thèmes
+Débutant	B01-B11	11	Suivi de commande, factures, annulations, garanties et retours
+Intermédiaire	I01-I30	30	Défauts des appareils, garanties, remboursements et dépannage technique
+Avancé	A01-A11	11	Accusations de fraude, sujets RGPD, clients difficiles, menaces juridiques et clients vulnérables
+Chaque scénario contient un profil client, les informations de l'appareil et de la commande, un message initial, un guide de résolution, des indications sur le comportement du client et des objectifs d'entraînement.
+Minuteurs de performance
 
----
+    FRT: délai jusqu'à la première réponse, avec un objectif de 60 secondes.
+    NRT: délai jusqu'à la réponse suivante, avec un objectif de 90 secondes.
+    Minuteur de session: durée totale de la session.
 
-## Fonctionnalités
+Outils de l'Agent
 
-### Multijoueur à deux utilisateurs
+    Modes réponse et note interne.
+    Bibliothèque de macros pour les réponses fréquentes.
+    Ajout de fichiers et d'images avec compression dans le navigateur.
+    Champs de ticket pour le statut, la priorité et la catégorie.
+    Évaluation QA et analyse de l'empathie.
 
-- Deux participants se connectent via un **Code de Session** partagé
-- Un utilisateur choisit le niveau de difficulté et devient l'**Agent**
-- L'autre rejoint via le code et devient le **Client**
-- Synchronisation en temps réel via **PeerJS (WebRTC)** avec fallback localStorage + BroadcastChannel
-- Fonctionne dans deux onglets du même navigateur ou sur deux appareils différents
+Démarrage
+Utiliser la version en ligne
+Ouvre la démo dans deux fenêtres de navigateur ou sur deux appareils:
+https://aitormaa.github.io/FR-Back-Market-Live-Chat-Simulator/
+La version française utilise le chemin Firebase sessions/fr.
+Exécuter le projet en local
+Le projet ne nécessite pas d'étape de compilation:
 
-### 52 Scénarios de Formation – 3 Niveaux de Difficulté
-
-| Niveau | Plage de codes | Scénarios | Points clés |
-|---|---|---|---|
-| Débutant | B01–B11 | 11 | Suivi de commande, factures, annulations, garanties, politique de retour |
-| Intermédiaire | I01–I30 | 30 | Défauts de l'appareil, demandes de garantie, litiges de remboursement, dépannage technique |
-| Expert | A01–A11 | 11 | Accusations de fraude, violations RGPD, clients hostiles, menaces juridiques, utilisateurs vulnérables |
-
-Chaque scénario comprend :
-
-- **Persona client** (nom, appareil, détails de commande, humeur)
-- **Message d'ouverture** du client
-- **Guide de résolution** (visible uniquement par l'Agent)
-- **Conseils** sur le comportement du client
-- **Défis clés** à travailler
-
-### Minuteries de Performance
-
-- **FRT** – Temps de Première Réponse (objectif : moins de 60 s), décompte automatique depuis le début de la session
-- **NRT** – Temps de Réponse Suivant (objectif : moins de 90 s), réinitialisé à chaque message du client
-- **Minuterie de Session** – temps total écoulé
-
-### Comportement Client Automatisé
-
-- Aucune réponse de l'agent après **60 secondes** : message de file d'attente automatique envoyé
-- Toujours aucune réponse après **120 secondes** : chat automatiquement transféré en mode asynchrone
-
-### Outils de l'Agent
-
-- Bascule **RÉPONSE / NOTE** (les notes internes ne sont pas visibles par le client)
-- **Bibliothèque de macros** (8 réponses prédéfinies : salutation, mise en attente, escalade, clôture, note récapitulative, etc.)
-- **Téléchargement de fichiers et d'images** avec compression côté client (max. 600px, JPEG 65 %)
-- Champs du ticket : **Statut**, **Priorité**, **Catégorie**
-
-### Score QA et Analyse de l'Empathie
-
-- **Score d'Empathie** automatique calculé à partir des messages de l'agent (détection de mots-clés, utilisation du prénom du client, fréquence)
-- **Grille d'évaluation QA** manuelle avec score pondéré
-- **Rapport de débriefing** complet à la clôture du chat
-
----
-
-## Démarrage
-
-### Option 1 – Utiliser la version en ligne
-
-Aucune installation requise. Ouvrir [https://aitormaa.github.io/FR-Back-Market-Live-Chat-Simulator/](https://aitormaa.github.io/FR-Back-Market-Live-Chat-Simulator/) dans deux fenêtres de navigateur ou sur deux appareils.
-
-### Option 2 – Exécuter en local
-
-Il s'agit d'un seul fichier HTML sans étape de build :
-
-```bash
-git clone https://github.com/aitormaa/backmarket-chat-simulator.git
-cd backmarket-chat-simulator
-open index.html
-```
-
-> **Remarque :** Certains navigateurs limitent localStorage et BroadcastChannel sur les URL `file://`. Pour de meilleurs résultats, utiliser un serveur local :
-
-```bash
-npx serve .
-# ou
+git clone https://github.com/aitormaa/FR-Back-Market-Live-Chat-Simulator.git
+cd FR-Back-Market-Live-Chat-Simulator
 python3 -m http.server 8080
-```
 
----
+Ouvre ensuite:
+http://localhost:8080
+Un serveur local est plus fiable que l'ouverture directe du fichier avec file://.
+Lancer une session
+Agent
 
-## Comment Lancer une Session
+    Ouvre le simulateur.
+    Sélectionne le rôle Agent.
+    Sélectionne le niveau de difficulté.
+    Saisis ton nom.
+    Partage le code de session à six caractères.
+    Attends l'arrivée du Client.
 
-### Agent (Formateur ou Stagiaire)
+Client
 
-1. Ouvrir le simulateur
-2. Choisir un niveau de difficulté : **Débutant**, **Intermédiaire** ou **Expert**
-3. Saisir son prénom
-4. Un **Code de Session à 6 caractères** est généré – le partager avec son partenaire
-5. Attendre que le client rejoigne, puis le chat commence
+    Ouvre le simulateur sur un autre appareil ou navigateur.
+    Sélectionne le rôle Client.
+    Saisis le code transmis par l'Agent.
+    Commence la conversation.
 
-### Client (Joueur de Rôle)
+Structure du dépôt
 
-1. Ouvrir le simulateur dans un autre onglet ou sur un autre appareil
-2. Cliquer sur **« Rejoindre en tant que Client »**
-3. Saisir le Code de Session partagé par l'Agent
-4. Le scénario se charge automatiquement – le chat peut commencer
+FR-Back-Market-Live-Chat-Simulator/
+├── index.html
+└── README.md
 
----
+La configuration Firebase est incluse dans index.html. Cette version indépendante ne nécessite pas de fichier firebase-config.js séparé.
+Configuration Firebase
+Le simulateur utilise Firebase Anonymous Authentication et Firebase Realtime Database. La configuration Web Firebase est incluse dans le HTML, comme prévu pour une application Web publique.
+La protection des données repose sur l'authentification et les règles de Realtime Database.
+Paramètres requis
 
-## Structure des Fichiers
+    Anonymous Authentication activée.
+    Realtime Database activée.
+    aitormaa.github.io ajouté aux domaines autorisés de Firebase Authentication.
+    Règles Realtime Database publiées.
 
-```
-backmarket-chat-simulator/
-└── index.html        # Application complète – autonome, aucune dépendance à installer
-```
+Utilise ces règles:
 
-L'application utilise des bibliothèques chargées via CDN (npm non requis) :
+Rules
+Sessions
+$locale
+$code
+.read
+auth != null
+.write
+auth != null
+.validate
+newData.hasChildren(['scenario', 'closed'])
 
-- [React 18](https://react.dev/) – framework UI
-- [Tailwind CSS](https://tailwindcss.com/) – mise en forme
-- [Babel Standalone](https://babeljs.io/) – transpilation JSX dans le navigateur
-- [PeerJS 1.5](https://peerjs.com/) – connexion WebRTC pair-à-pair
+Ne rends pas messages obligatoire dans la validation. Une nouvelle session commence avec une liste de messages vide.
+Les sessions françaises sont stockées ici:
 
----
+sessions/fr/SESSION_CODE
 
-## Architecture
+Architecture
+Firebase est la source principale pour les sessions et les messages. Le navigateur conserve un cache local. PeerJS WebRTC peut établir une connexion directe lorsque le réseau l'autorise.
+Si la console affiche WebRTC: ICE failed, Firebase doit continuer à synchroniser la session et les messages.
+Évaluation
+Le simulateur calcule un Empathy Score et propose une checklist QA avec des critères tels que:
 
-```
-AGENT (Onglet / Appareil A)              CLIENT (Onglet / Appareil B)
+    Qualité de l'accueil.
+    Identification du problème.
+    Exactitude de la solution.
+    Respect des politiques.
+    Clarté de la communication.
+    Rapidité de réponse.
 
-Crée le code de session                  Rejoint via le code de session
-Reçoit le scénario + les conseils        Reçoit le scénario (sans conseils)
-Voit le score QA                         Voit uniquement le chat côté client
+Dépannage
+Si la console affiche:
 
-          |                                       |
-          +------------ PeerJS WebRTC ------------+
-               BroadcastChannel + localStorage (fallback)
-```
+Firebase is not configured. Local-only mode is active.
 
-**Flux de données de session :**
+Vérifie que tu utilises la version Firebase de index.html.
+Si elle affiche:
 
-1. L'Agent crée la session – le scénario est stocké dans `localStorage` sous le code de session
-2. PeerJS envoie le payload `INIT` au Client lors de la connexion
-3. Les messages sont diffusés via WebRTC DataChannel + écriture dans `localStorage`
-4. `BroadcastChannel` maintient la synchronisation entre les onglets du même appareil (polling 400 ms en fallback)
+PERMISSION_DENIED
 
----
+Vérifie qu'Anonymous Authentication est activée et que les règles Realtime Database sont publiées.
+Roadmap
 
-## Configuration
+    Réunir les quatre dépôts de langue dans un seul dépôt.
+    Créer un tableau de bord administrateur avec les indicateurs de l'équipe.
+    Exporter les comptes rendus de session en PDF.
+    Stocker les fichiers volumineux dans Firebase Storage.
 
-Tous les scénarios, macros et messages automatiques sont définis sous forme de tableaux JavaScript simples en haut de `index.html` – aucun backend ni base de données requis.
-
-| Constante | Description |
-|---|---|
-| `SC` | Tableau des 52 scénarios de formation |
-| `MACROS` | Modèles de macros pour l'Agent (supporte `{CUSTOMER_FNAME}`, `{CURRENT_USER_FNAME}`) |
-| `AUTO` | Messages automatiques envoyés lors de l'inactivité de l'Agent à 60 s et 120 s |
-| `PCFG` | Configuration PeerJS (serveurs STUN) |
-
----
-
-## Détails du Score
-
-### Score d'Empathie (calculé automatiquement, max. 25 pts)
-
-Analyse tous les messages de l'Agent pour :
-
-- Les mots-clés d'empathie (`comprends`, `désolé`, `excuse`, `avec plaisir`, etc.)
-- L'utilisation du **prénom du client**
-- La fréquence et la cohérence tout au long de la conversation
-
-### Score QA (grille manuelle)
-
-Les évaluateurs vérifient des éléments dans les catégories suivantes :
-
-- Qualité de la salutation
-- Identification du problème
-- Pertinence de la solution
-- Respect des politiques
-- Clarté de la communication
-- Vitesse de réponse (objectifs FRT et NRT)
-
----
-
-## Feuille de Route
-
-- [ ] Backend Firebase / Supabase pour l'historique persistant des sessions
-- [ ] Tableau de bord administrateur avec analyses à l'échelle de l'équipe
-- [ ] Version en espagnol (`index-es.html`)
-- [ ] Injection de scénario par le formateur en cours de session
-- [ ] Rapport de débriefing exportable en PDF
-
----
-
-## Contributeurs
-
-Développé par l'équipe Learning & Development / Service Client de Back Market.
-
----
-
-## Licence
-
-Usage interne uniquement – outil propriétaire Back Market. Non destiné à la distribution publique.
+Licence
+Usage interne uniquement. Outil propriétaire de Back Market. Aucune diffusion publique.
